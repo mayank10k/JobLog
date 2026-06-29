@@ -39,6 +39,13 @@ router.post('/login',async(req,res)=>{
       return res.status(401).json({error:"Invalid email or password"});
     }
 
+    const payload={
+      id:user.id,
+    }
+    const token=generateToken(payload);
+
+    res.json({token});
+    
   }catch(err){
     console.log(err);
     res.status(500).json({error:'internal server error'})
