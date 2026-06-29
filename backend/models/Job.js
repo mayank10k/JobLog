@@ -13,7 +13,10 @@ const jobSchema=new mongoose.Schema({
         type:String,
 
     },
-    date:{
+    notes:{
+        type:String
+    },
+    reminderDate:{
         type:String,
     }
 })
