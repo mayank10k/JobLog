@@ -17,9 +17,17 @@ const jobSchema=new mongoose.Schema({
         type:String
     },
     reminderDate:{
-        type:String,
-    }
+        type:Date,
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+},
+{
+    timestamps: true
 })
 
-const Job=mongoose.model('Job',userSchema);
+const Job=mongoose.model('Job',jobSchema);
 module.exports=Job;

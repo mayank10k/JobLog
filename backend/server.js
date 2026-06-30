@@ -10,9 +10,11 @@ const port = 3000;
 
 
 const userAuth=require('./routes/auth');
+const jobRoute=require('./routes/jobs')
 
 
 app.use('/user',userAuth);
+app.use('/job',jobRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`)
