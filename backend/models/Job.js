@@ -11,13 +11,18 @@ const jobSchema=new mongoose.Schema({
     },
     status:{
         type:String,
-
+        enum: ["Applied", "Interview", "Offer", "Rejected"],
+        default: "Applied",
     },
     notes:{
         type:String
     },
     reminderDate:{
         type:Date,
+    },
+    followUpDue: { 
+        type: Boolean,
+        default: false 
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
