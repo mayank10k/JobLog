@@ -18,8 +18,15 @@ const signup=async(req,res)=>{
         const token=generateToken(payload);
         await redisClient.set(`session:${response.id}`,token,"EX",604800)
 
-        res.status(200).json({response:response,token:token})
-
+        res.status(200).json({
+            token,
+            user: {
+                id: response._id,
+                name: response.name,
+                email: response.email
+            }
+        });
+        
     }catch(err){
         console.log(err);
         res.status(500).json({error:'internal serverr error'})
@@ -43,7 +50,14 @@ const login=async(req,res)=>{
 
         await redisClient.set(`session:${user.id}`,token,"EX",604800)
 
-        res.json({token});
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
 
   }catch(err){
     console.log(err);
