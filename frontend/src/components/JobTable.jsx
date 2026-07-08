@@ -19,7 +19,6 @@ const JobTable = ({ jobs, onJobUpdated, onJobDeleted }) => {
     }
   };
 
-  // ← this replaces handleDelete completely
   const handleDeleteConfirm = async () => {
     try {
       await deleteJob(deletingJob._id);
@@ -100,6 +99,10 @@ const JobTable = ({ jobs, onJobUpdated, onJobDeleted }) => {
                       <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">
                         Follow up!
                       </span>
+                    ) : job.reminderDate && new Date(job.reminderDate) <= new Date() ? (
+                      <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                        Due today
+                      </span>
                     ) : (
                       <span className="text-gray-300 text-xs">
                         {formatDate(job.reminderDate)}
@@ -112,7 +115,7 @@ const JobTable = ({ jobs, onJobUpdated, onJobDeleted }) => {
                   <td className="px-4 py-3">
                     <Button
                       variant="danger"
-                      onClick={() => setDeletingJob(job)} // ← passes full job object
+                      onClick={() => setDeletingJob(job)}
                       className="text-xs px-3 py-1"
                     >
                       Delete
@@ -125,13 +128,12 @@ const JobTable = ({ jobs, onJobUpdated, onJobDeleted }) => {
         </div>
       </div>
 
-      {/* custom delete confirmation modal */}
       {deletingJob && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
             className="absolute inset-0 backdrop-blur-sm bg-black/10"
             onClick={() => setDeletingJob(null)}
-            />
+          />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6 z-10 text-center">
             <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getReminders } from "../services/jobService";
+import { getReminders, updateJob } from "../services/jobService";
 import StatusBadge from "../components/StatusBadge";
 import { formatDate } from "../utils/formatDate";
 
@@ -8,18 +8,29 @@ const Reminders = () => {
   const [loading, setLoading]     = useState(true);
 
   useEffect(() => {
-    const fetchReminders = async () => {
-      try {
-        const data = await getReminders();
-        setReminders(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchReminders();
   }, []);
+
+  const fetchReminders = async () => {
+    try {
+      const data = await getReminders();
+      setReminders(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // dismiss removes it from reminders page without deleting the job
+  const handleDismiss = async (jobId) => {
+    try {
+      await updateJob(jobId, { followUpDue: false });
+      setReminders((prev) => prev.filter((j) => j._id !== jobId));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -37,9 +48,7 @@ const Reminders = () => {
       ) : reminders.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-10 text-center">
           <p className="text-gray-400 text-sm">No follow-ups due right now.</p>
-          <p className="text-gray-300 text-xs mt-1">
-            You're all caught up!
-          </p>
+          <p className="text-gray-300 text-xs mt-1">You're all caught up!</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -54,12 +63,23 @@ const Reminders = () => {
                 <p className="text-xs text-gray-400 mt-1">
                   Applied: {formatDate(job.createdAt)}
                 </p>
+                {job.reminderDate && (
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Reminder set: {formatDate(job.reminderDate)}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col items-end gap-2">
                 <StatusBadge status={job.status} />
                 <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">
                   Follow up due
                 </span>
+                <button
+                  onClick={() => handleDismiss(job._id)}
+                  className="text-xs text-gray-400 hover:text-gray-600 underline mt-1"
+                >
+                  Dismiss
+                </button>
               </div>
             </div>
           ))}
