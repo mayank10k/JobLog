@@ -17,7 +17,18 @@ const cors = require("cors");
 //for production
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:5173",     // local dev
+        "http://localhost:80",       // local Docker
+        process.env.FRONTEND_URL,   // production Vercel URL
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
