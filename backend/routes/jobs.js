@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {jwtAuthMiddleware,generateToken} = require("../middleware/authMiddleware");
+const {jwtAuthMiddleware,generateToken} = require("../middleware/authmiddleware");
 const {
   addJob,
   getAllJobs,

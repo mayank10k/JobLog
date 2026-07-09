@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-const mongoURL='mongodb://localhost:27017/joblog';
+const mongoURL=process.env.MONGODB_URL_LOCAL;
 mongoose.connect(mongoURL);
 const db=mongoose.connection;
 
